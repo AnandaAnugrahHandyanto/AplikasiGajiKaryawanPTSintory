@@ -15,7 +15,8 @@ public class AplikasiGajiKaryawanPTSintory {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        formUtama.setVisible(true);
-    }
-    
+        java.awt.EventQueue.invokeLater(() -> {
+            new view.FormLogin().setVisible(true);
+        });
+    }  
 }

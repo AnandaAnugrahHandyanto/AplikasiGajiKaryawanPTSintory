@@ -4,88 +4,93 @@
  */
 package controller;
 
-import java.util.ArrayList;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 import model.Karyawan;
-import model.KaryawanRepository;
 import model.Pekerjaan;
-import model.PekerjaanRepository;
+import model.Gaji;
+import view.FormLihatKaryawan;
 import view.FormLihatPekerjaan;
+import view.FormUtama;
 
 /**
  *
  * @author anandaanugrah
  */
 public class GajiController {
+    private final Karyawan karyawan = new Karyawan();
+    private final Pekerjaan pekerjaan = new Pekerjaan();
+    private final Gaji gaji = new Gaji();
+    private FormLihatKaryawan formLihatKaryawan;
+    private FormLihatPekerjaan formLihatPekerjaan;
     
-    private static ArrayList<Object[]> dataGaji = new ArrayList<>();
+    public void cariKaryawan(javax.swing.JTextField ktp) {
+        if (!ktp.getText().equals("")) {
+            if (karyawan.baca(ktp.getText())) {
+                FormUtama.formGaji.setNama(karyawan.getNama());
+                FormUtama.formGaji.setRuang(Integer.toString(karyawan.getRuang()));
+                FormUtama.formGaji.clearGajiTable();
+                
+                if (gaji.baca(ktp.getText())) {
+                    Object[][] listGaji = gaji.getListGaji();
+                    FormUtama.formGaji.clearGajiTable();
+                    if (listGaji.length > 0) {
+                        for (int i = 0; i < listGaji.length; i++) {
+                            if (!((String) listGaji[i][0]).equals("")) {
+                                String namaPekerjaan = "";
+                                if (pekerjaan.baca((String) listGaji[i][0])) {
+                                    namaPekerjaan = pekerjaan.getNamaPekerjaan();
+                                }
+                                FormUtama.formGaji.setTambahGaji(new Object[]{
+                                    listGaji[i][0], namaPekerjaan,
+                                    listGaji[i][1], listGaji[i][2], listGaji[i][3]
+                                });
+                            }
+                        }
+                    } else {
+                        FormUtama.formGaji.setTambahGaji(new Object[]{});
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, karyawan.getPesan(), 
+                    "Kesalahan", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "KTP tidak boleh kosong", 
+                "Kesalahan", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void tampilkanFormLihatKaryawan() {
+        formLihatKaryawan = new FormLihatKaryawan(null, true);
+        if (karyawan.bacaData()) {
+            formLihatKaryawan.tampilkanData(karyawan.getList());
+            formLihatKaryawan.setVisible(true);
+        }
+    }
     
     public void tampilkanFormLihatPekerjaan() {
-        FormLihatPekerjaan formLihat = new FormLihatPekerjaan(null, true);
-        
-        ArrayList<Pekerjaan> list = PekerjaanRepository.getAll();
-        Object[][] data = new Object[list.size()][2];
-        
-        for (int i = 0; i < list.size(); i++) {
-            data[i][0] = list.get(i).getKode();
-            data[i][1] = list.get(i).getNama();
+        formLihatPekerjaan = new FormLihatPekerjaan(null, true);
+        if (pekerjaan.bacaData()) {
+            formLihatPekerjaan.tampilkanData(pekerjaan.getList());
+            formLihatPekerjaan.setVisible(true);
+            
+            if (!formLihatPekerjaan.getKodePekerjaanDipilih().equals("")) {
+                if (pekerjaan.baca(formLihatPekerjaan.getKodePekerjaanDipilih())) {
+                    FormUtama.formGaji.setTambahGaji(new Object[]{
+                        pekerjaan.getKodePekerjaan(),
+                        pekerjaan.getNamaPekerjaan(), "", "", ""
+                    });
+                }
+            }
         }
-        
-        formLihat.tampilkanData(data);
-        formLihat.setVisible(true);
     }
     
-    public Pekerjaan cariPekerjaan(String kode) {
-        return PekerjaanRepository.cariByKode(kode);
-    }
-
-    public void simpan(JTextField ktpTextField, JTable gajiTable) {
-        String ktp = ktpTextField.getText().trim();
-        
-        if (ktp.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(null, 
-                "KTP harus diisi!");
-            return;
+    public void cariPekerjaan(String kodePekerjaan) {
+        if (pekerjaan.baca(kodePekerjaan)) {
+            FormUtama.formGaji.setNamaPekerjaan(pekerjaan.getNamaPekerjaan());
+        } else {
+            FormUtama.formGaji.setNamaPekerjaan("");
+            FormUtama.formGaji.hapusGaji();
         }
-        
-        Karyawan karyawan = KaryawanRepository.cariByKtp(ktp);
-        if (karyawan == null) {
-            javax.swing.JOptionPane.showMessageDialog(null, 
-                "Karyawan dengan KTP " + ktp + " tidak ditemukan!");
-            return;
-        }
-        
-        DefaultTableModel model = (DefaultTableModel) gajiTable.getModel();
-        int rowCount = model.getRowCount();
-        
-        if (rowCount == 0) {
-            javax.swing.JOptionPane.showMessageDialog(null, 
-                "Belum ada data gaji di tabel!");
-            return;
-        }
-        
-        dataGaji.clear();
-        for (int i = 0; i < rowCount; i++) {
-            Object kode = model.getValueAt(i, 0);
-            Object nama = model.getValueAt(i, 1);
-            Object gajiBersih = model.getValueAt(i, 2);
-            Object gajiKotor = model.getValueAt(i, 3);
-            Object tunjangan = model.getValueAt(i, 4);
-            
-            if (kode == null || kode.toString().isEmpty()) continue;
-            
-            dataGaji.add(new Object[]{
-                ktp, kode, nama, gajiBersih, gajiKotor, tunjangan
-            });
-        }
-        
-        javax.swing.JOptionPane.showMessageDialog(null, 
-            "Data gaji berhasil disimpan!\nTotal: " + dataGaji.size() + " baris");
-    }
-    
-    public static ArrayList<Object[]> getDataGaji() {
-        return dataGaji;
     }
 }

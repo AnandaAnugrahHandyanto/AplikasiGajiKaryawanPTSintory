@@ -205,61 +205,13 @@ public class FormKaryawan extends javax.swing.JInternalFrame {
     }
     
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
-        String ktp = ktpTextField.getText().trim();
-        String nama = namaTextField.getText().trim();
-        int ruang = Integer.parseInt(ruangComboBox.getSelectedItem().toString());
-        String password = new String(passwordField.getPassword());
-        
-        if (ktp.isEmpty() || nama.isEmpty() || password.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                    "Semua field harus diisi!");
-            return;
-        }
-        
-        model.Karyawan existing = model.KaryawanRepository.cariByKtp(ktp);
-        
-        if (existing != null) {
-            model.Karyawan karyawan = new model.Karyawan(ktp, nama, ruang, password);
-            model.KaryawanRepository.update(karyawan);
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                    "Data berhasil diupdate!");
-        } else {
-            model.Karyawan karyawan = new model.Karyawan(ktp, nama, ruang, password);
-            model.KaryawanRepository.tambah(karyawan);
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                    "Data berhasil disimpan!");
-        }
-        ktpTextField.setText("");
-        namaTextField.setText("");
-        passwordField.setText("");
-        ruangComboBox.setSelectedIndex(0);
-
+        controller.KaryawanController karyawanController = new controller.KaryawanController();
+        karyawanController.simpan(ktpTextField, namaTextField, ruangComboBox, passwordField);
     }//GEN-LAST:event_simpanButtonActionPerformed
 
     private void lihatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lihatButtonActionPerformed
-        FormLihatKaryawan formLihat = new FormLihatKaryawan(null, true);
-    
-        java.util.ArrayList<model.Karyawan> list = model.KaryawanRepository.getAll();
-        Object[][] data = new Object[list.size()][2];
-    
-        for (int i = 0; i < list.size(); i++) {
-            data[i][0] = list.get(i).getKtp();
-            data[i][1] = list.get(i).getNama();
-        }
-    
-        formLihat.tampilkanData(data);
-        formLihat.setVisible(true);
-
-        String ktpDipilih = formLihat.getKtpDipilih();
-            if (ktpDipilih != null && !ktpDipilih.isEmpty()) {
-            model.Karyawan k = model.KaryawanRepository.cariByKtp(ktpDipilih);
-            if (k != null) {
-                ktpTextField.setText(k.getKtp());
-                namaTextField.setText(k.getNama());
-                ruangComboBox.setSelectedItem(String.valueOf(k.getRuang()));
-                passwordField.setText(k.getPassword());
-            }
-        }
+        controller.KaryawanController karyawanController = new controller.KaryawanController();
+        karyawanController.tampilkanFormLihatKaryawan();
     }//GEN-LAST:event_lihatButtonActionPerformed
 
     private void ruangComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ruangComboBoxItemStateChanged
@@ -271,35 +223,27 @@ public class FormKaryawan extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tutupButtonActionPerformed
 
     private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
-            String ktp = ktpTextField.getText().trim();
+        String kode = kodePekerjaanTextField.getText().trim();
+    if (kode.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Masukkan Kode Pekerjaan!");
+        return;
+    }
     
-        if (ktp.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Masukkan KTP yang ingin dihapus!");
-            return;
+    int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, 
+        "Yakin hapus Kode " + kode + "?", "Konfirmasi", 
+        javax.swing.JOptionPane.YES_NO_OPTION);
+    
+    if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
+        model.Pekerjaan pekerjaan = new model.Pekerjaan();
+        if (pekerjaan.hapus(kode)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
+            kodePekerjaanTextField.setText("");
+            namaPekerjaanTextField.setText("");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, pekerjaan.getPesan());
         }
-    
-        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, 
-            "Yakin hapus data dengan KTP " + ktp + "?", 
-            "Konfirmasi", 
-            javax.swing.JOptionPane.YES_NO_OPTION);
-    
-        if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
-            boolean berhasil = model.KaryawanRepository.hapus(ktp);
-            if (berhasil) {
-                javax.swing.JOptionPane.showMessageDialog(this, 
-                    "Data berhasil dihapus!");
-                ktpTextField.setText("");
-                namaTextField.setText("");
-                passwordField.setText("");
-                ruangComboBox.setSelectedIndex(0);
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, 
-                    "Data tidak ditemukan!");
-            }
-        }
+    }
     }//GEN-LAST:event_hapusButtonActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton hapusButton;

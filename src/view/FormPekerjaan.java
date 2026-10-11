@@ -187,87 +187,36 @@ public class FormPekerjaan extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tutupButtonActionPerformed
 
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
-        String kode = kodePekerjaanTextField.getText().trim();
-        String nama = namaPekerjaanTextField.getText().trim();
-        int jumlahTugas = Integer.parseInt(jumlahTugasComboBox.getSelectedItem().toString());
-    
-        if (kode.isEmpty() || nama.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Semua field harus diisi!");
-            return;
-        }
-        
-        model.Pekerjaan existing = model.PekerjaanRepository.cariByKode(kode);
-    
-        if (existing != null) {
-            model.Pekerjaan pekerjaan = new model.Pekerjaan(kode, nama, jumlahTugas);
-            model.PekerjaanRepository.update(pekerjaan);
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Data berhasil diupdate!");
-        } else {
-            model.Pekerjaan pekerjaan = new model.Pekerjaan(kode, nama, jumlahTugas);
-            model.PekerjaanRepository.tambah(pekerjaan);
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Data berhasil disimpan!");
-        }
-    
-        kodePekerjaanTextField.setText("");
-        namaPekerjaanTextField.setText("");
-        jumlahTugasComboBox.setSelectedIndex(0);
+        controller.PekerjaanController pekerjaanController = new controller.PekerjaanController();
+        pekerjaanController.simpan(kodePekerjaanTextField, namaPekerjaanTextField, jumlahTugasComboBox);
     }//GEN-LAST:event_simpanButtonActionPerformed
 
     private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
         String kode = kodePekerjaanTextField.getText().trim();
+    if (kode.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Masukkan Kode Pekerjaan!");
+        return;
+    }
     
-        if (kode.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Masukkan Kode Pekerjaan yang ingin dihapus!");
-            return;
+    int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, 
+        "Yakin hapus Kode " + kode + "?", "Konfirmasi", 
+        javax.swing.JOptionPane.YES_NO_OPTION);
+    
+    if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
+        model.Pekerjaan pekerjaan = new model.Pekerjaan();
+        if (pekerjaan.hapus(kode)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
+            kodePekerjaanTextField.setText("");
+            namaPekerjaanTextField.setText("");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, pekerjaan.getPesan());
         }
-    
-        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, 
-            "Yakin hapus data dengan Kode " + kode + "?", 
-            "Konfirmasi", 
-            javax.swing.JOptionPane.YES_NO_OPTION);
-    
-        if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
-            boolean berhasil = model.PekerjaanRepository.hapus(kode);
-            if (berhasil) {
-                javax.swing.JOptionPane.showMessageDialog(this, 
-                    "Data berhasil dihapus!");
-                kodePekerjaanTextField.setText("");
-                namaPekerjaanTextField.setText("");
-                jumlahTugasComboBox.setSelectedIndex(0);
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, 
-                    "Data tidak ditemukan!");
-            }
-        }
+    }
     }//GEN-LAST:event_hapusButtonActionPerformed
 
     private void lihatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lihatButtonActionPerformed
-        FormLihatPekerjaan formLihat = new FormLihatPekerjaan(null, true);
-    
-        java.util.ArrayList<model.Pekerjaan> list = model.PekerjaanRepository.getAll();
-        Object[][] data = new Object[list.size()][2];
-    
-        for (int i = 0; i < list.size(); i++) {
-            data[i][0] = list.get(i).getKode();
-            data[i][1] = list.get(i).getNama();
-        }
-    
-        formLihat.tampilkanData(data);
-        formLihat.setVisible(true);
-    
-        String kodeDipilih = formLihat.getKodePekerjaanDipilih();
-        if (kodeDipilih != null && !kodeDipilih.isEmpty()) {
-            model.Pekerjaan p = model.PekerjaanRepository.cariByKode(kodeDipilih);
-            if (p != null) {
-                kodePekerjaanTextField.setText(p.getKode());
-                namaPekerjaanTextField.setText(p.getNama());
-                jumlahTugasComboBox.setSelectedItem(String.valueOf(p.getJumlahTugas()));
-            }
-        }
+        controller.PekerjaanController pekerjaanController = new controller.PekerjaanController();
+        pekerjaanController.tampilkanDaftar();
     }//GEN-LAST:event_lihatButtonActionPerformed
 
 

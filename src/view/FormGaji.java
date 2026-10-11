@@ -261,28 +261,15 @@ public class FormGaji extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_ktpTextFieldActionPerformed
 
     private void lihatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lihatButtonActionPerformed
-        view.FormLihatKaryawan formLihat = new view.FormLihatKaryawan(null, true);
+        controller.GajiController gajiController = new controller.GajiController();
+    gajiController.tampilkanFormLihatKaryawan();
+    
+    String ktpDipilih = "";
+    if (!ktpDipilih.isEmpty()) {
+        javax.swing.JTextField temp = new javax.swing.JTextField(ktpDipilih);
+        gajiController.cariKaryawan(temp);
+    }
 
-        java.util.ArrayList<model.Karyawan> list = model.KaryawanRepository.getAll();
-        Object[][] data = new Object[list.size()][2];
-
-        for (int i = 0; i < list.size(); i++) {
-            data[i][0] = list.get(i).getKtp();
-            data[i][1] = list.get(i).getNama();
-        }
-
-        formLihat.tampilkanData(data);
-        formLihat.setVisible(true);
-
-        String ktpDipilih = formLihat.getKtpDipilih();
-        if (ktpDipilih != null && !ktpDipilih.isEmpty()) {
-            model.Karyawan k = model.KaryawanRepository.cariByKtp(ktpDipilih);
-            if (k != null) {
-                ktpTextField.setText(k.getKtp());
-                namaTextField.setText(k.getNama());
-                ruangTextField.setText(String.valueOf(k.getRuang()));
-            }
-        }
     }//GEN-LAST:event_lihatButtonActionPerformed
 
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
