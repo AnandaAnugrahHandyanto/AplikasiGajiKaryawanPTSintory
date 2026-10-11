@@ -15,6 +15,7 @@ public class FormUtama extends javax.swing.JFrame {
     
     public static FormKaryawan formKaryawan;
     public static FormPekerjaan formPekerjaan;
+    public static FormGaji formGaji;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FormUtama.class.getName());
 
@@ -95,6 +96,7 @@ public class FormUtama extends javax.swing.JFrame {
         transaksiMenu.setText("Transaksi");
 
         gajiMenuItem.setText("Gaji");
+        gajiMenuItem.addActionListener(this::gajiMenuItemActionPerformed);
         transaksiMenu.add(gajiMenuItem);
 
         jMenuBar1.add(transaksiMenu);
@@ -180,6 +182,20 @@ public class FormUtama extends javax.swing.JFrame {
         formPekerjaan.setVisible(true);
     }
     }//GEN-LAST:event_pekerjaanMenuItemActionPerformed
+
+    private void gajiMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gajiMenuItemActionPerformed
+        if ((formGaji != null) && formGaji.isVisible()) {
+            try {
+                formGaji.setSelected(true);
+            } catch (java.beans.PropertyVetoException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            formGaji = new FormGaji();
+            mdiDesktopPane.add(formGaji);
+            formGaji.setVisible(true);
+        }
+    }//GEN-LAST:event_gajiMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
