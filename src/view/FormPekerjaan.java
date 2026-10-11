@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FormPekerjaan extends javax.swing.JInternalFrame {
 
+    private final controller.PekerjaanController pekerjaanController = new controller.PekerjaanController();
     /**
      * Creates new form FormPekerjaan
      */
@@ -50,6 +51,12 @@ public class FormPekerjaan extends javax.swing.JInternalFrame {
         jLabel2.setText("Nama Pekerjaan");
 
         jLabel3.setText("Jumlah Tugas");
+
+        kodePekerjaanTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                kodePekerjaanTextFieldKeyPressed(evt);
+            }
+        });
 
         jumlahTugasComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -187,37 +194,22 @@ public class FormPekerjaan extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tutupButtonActionPerformed
 
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
-        controller.PekerjaanController pekerjaanController = new controller.PekerjaanController();
         pekerjaanController.simpan(kodePekerjaanTextField, namaPekerjaanTextField, jumlahTugasComboBox);
     }//GEN-LAST:event_simpanButtonActionPerformed
 
     private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
-        String kode = kodePekerjaanTextField.getText().trim();
-    if (kode.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Masukkan Kode Pekerjaan!");
-        return;
-    }
-    
-    int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, 
-        "Yakin hapus Kode " + kode + "?", "Konfirmasi", 
-        javax.swing.JOptionPane.YES_NO_OPTION);
-    
-    if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
-        model.Pekerjaan pekerjaan = new model.Pekerjaan();
-        if (pekerjaan.hapus(kode)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
-            kodePekerjaanTextField.setText("");
-            namaPekerjaanTextField.setText("");
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, pekerjaan.getPesan());
-        }
-    }
+            pekerjaanController.hapus(kodePekerjaanTextField);
     }//GEN-LAST:event_hapusButtonActionPerformed
 
     private void lihatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lihatButtonActionPerformed
-        controller.PekerjaanController pekerjaanController = new controller.PekerjaanController();
         pekerjaanController.tampilkanDaftar();
     }//GEN-LAST:event_lihatButtonActionPerformed
+
+    private void kodePekerjaanTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_kodePekerjaanTextFieldKeyPressed
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            pekerjaanController.cari(kodePekerjaanTextField);
+        }
+    }//GEN-LAST:event_kodePekerjaanTextFieldKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

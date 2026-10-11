@@ -16,6 +16,8 @@ public class FormUtama extends javax.swing.JFrame {
     public static FormKaryawan formKaryawan;
     public static FormPekerjaan formPekerjaan;
     public static FormGaji formGaji;
+    public final FormDeskripsi formDeskripsi = new FormDeskripsi(this, true);
+    public final FormLogin FormLogin = new FormLogin(this, true);
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FormUtama.class.getName());
 
@@ -24,6 +26,9 @@ public class FormUtama extends javax.swing.JFrame {
      */
     public FormUtama() {
         initComponents();
+        setUkuranLokasiFrame(0.8, true);
+        setEnableMenu(true);
+        aksesMenuItem.setText("Logout");
     }
 
     /**
@@ -70,9 +75,11 @@ public class FormUtama extends javax.swing.JFrame {
         aplikasiMenu.addActionListener(this::aplikasiMenuActionPerformed);
 
         deskripsiMenuItem.setText("Deskripsi");
+        deskripsiMenuItem.addActionListener(this::deskripsiMenuItemActionPerformed);
         aplikasiMenu.add(deskripsiMenuItem);
 
         aksesMenuItem.setText("Login");
+        aksesMenuItem.addActionListener(this::aksesMenuItemActionPerformed);
         aplikasiMenu.add(aksesMenuItem);
 
         keluarMenuItem.setText("Keluar");
@@ -131,17 +138,16 @@ public class FormUtama extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void aplikasiMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aplikasiMenuActionPerformed
-
-    }//GEN-LAST:event_aplikasiMenuActionPerformed
-
     
-    private void setEnableMenu(boolean aktif) {
+        private void setEnableMenu(boolean aktif) {
         masterDataMenu.setEnabled(aktif);
         transaksiMenu.setEnabled(aktif);
         laporanMenu.setEnabled(aktif);
     }
-    
+    private void aplikasiMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aplikasiMenuActionPerformed
+
+    }//GEN-LAST:event_aplikasiMenuActionPerformed
+  
     private void setUkuranLokasiFrame(double skala, boolean tengah) {
         Dimension dimensi = Toolkit.getDefaultToolkit().getScreenSize();
         setSize((int)(skala * dimensi.getWidth()), (int)(skala * dimensi.getHeight()));
@@ -184,7 +190,7 @@ public class FormUtama extends javax.swing.JFrame {
     }//GEN-LAST:event_pekerjaanMenuItemActionPerformed
 
     private void gajiMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gajiMenuItemActionPerformed
-        if ((formGaji != null) && formGaji.isVisible()) {
+            if ((formGaji != null) && formGaji.isVisible()) {
             try {
                 formGaji.setSelected(true);
             } catch (java.beans.PropertyVetoException ex) {
@@ -196,6 +202,25 @@ public class FormUtama extends javax.swing.JFrame {
             formGaji.setVisible(true);
         }
     }//GEN-LAST:event_gajiMenuItemActionPerformed
+
+    private void deskripsiMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deskripsiMenuItemActionPerformed
+        formDeskripsi.setVisible(true);
+    }//GEN-LAST:event_deskripsiMenuItemActionPerformed
+
+    private void aksesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aksesMenuItemActionPerformed
+            if (aksesMenuItem.getText().equals("Login")) {
+            FormLogin.setVisible(true);
+            if (!FormLogin.getUserLogin().equals("")) {
+                setEnableMenu(true);
+                aksesMenuItem.setText("Logout");
+            } else {
+                setEnableMenu(false);
+            }
+        } else {
+            aksesMenuItem.setText("Login");
+            setEnableMenu(false);
+        }
+    }//GEN-LAST:event_aksesMenuItemActionPerformed
 
     /**
      * @param args the command line arguments

@@ -44,6 +44,46 @@ public class PekerjaanController {
         }
     }
     
+        public void cari(javax.swing.JTextField kodePekerjaanTextField) {
+        if (!kodePekerjaanTextField.getText().equals("")) {
+            if (pekerjaan.baca(kodePekerjaanTextField.getText())) {
+                FormUtama.formPekerjaan.setNamaPekerjaan(pekerjaan.getNamaPekerjaan());
+                FormUtama.formPekerjaan.setJumlahTugas(pekerjaan.getJumlahTugas());
+            } else {
+                FormUtama.formPekerjaan.setNamaPekerjaan("");
+                FormUtama.formPekerjaan.setJumlahTugas(1);
+                javax.swing.JOptionPane.showMessageDialog(null, 
+                    pekerjaan.getPesan(), "Kesalahan", 
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, 
+                "Kode pekerjaan tidak boleh kosong", "Kesalahan", 
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void hapus(javax.swing.JTextField kodePekerjaanTextField) {
+        String kode = kodePekerjaanTextField.getText().trim();
+        if (kode.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Masukkan Kode Pekerjaan!");
+            return;
+        }
+
+        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(null, 
+            "Yakin hapus Kode " + kode + "?", "Konfirmasi", 
+            javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
+            if (pekerjaan.hapus(kode)) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Data berhasil dihapus!");
+                FormUtama.formPekerjaan.setKodePekerjaan("");
+                FormUtama.formPekerjaan.setNamaPekerjaan("");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(null, pekerjaan.getPesan());
+            }
+        }
+    }
     public void tampilkanDaftar() {
         formLihatPekerjaan = new FormLihatPekerjaan(null, true);
         if (pekerjaan.bacaData()) {

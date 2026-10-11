@@ -16,7 +16,9 @@ public class AplikasiGajiKaryawanPTSintory {
      */
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {
-            new view.FormLogin().setVisible(true);
+            view.FormLogin form = new view.FormLogin(null, true);
+            form.setLocationRelativeTo(null);
+            form.setVisible(true);
         });
-    }  
+    }
 }

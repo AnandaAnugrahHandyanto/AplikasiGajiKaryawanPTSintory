@@ -156,7 +156,7 @@ public class FormGaji extends javax.swing.JInternalFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                true, false, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -164,6 +164,9 @@ public class FormGaji extends javax.swing.JInternalFrame {
             }
         });
         gajiTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                gajiTableMousePressed(evt);
+            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 gajiTableMouseReleased(evt);
             }
@@ -263,12 +266,6 @@ public class FormGaji extends javax.swing.JInternalFrame {
     private void lihatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lihatButtonActionPerformed
         controller.GajiController gajiController = new controller.GajiController();
     gajiController.tampilkanFormLihatKaryawan();
-    
-    String ktpDipilih = "";
-    if (!ktpDipilih.isEmpty()) {
-        javax.swing.JTextField temp = new javax.swing.JTextField(ktpDipilih);
-        gajiController.cariKaryawan(temp);
-    }
 
     }//GEN-LAST:event_lihatButtonActionPerformed
 
@@ -277,7 +274,7 @@ public class FormGaji extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_simpanButtonActionPerformed
 
     private void gajiTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gajiTableMouseReleased
-            java.awt.Point p = evt.getPoint();
+        java.awt.Point p = evt.getPoint();
         int rowNumber = gajiTable.rowAtPoint(p);
         javax.swing.ListSelectionModel model = gajiTable.getSelectionModel();
         model.setSelectionInterval(rowNumber, rowNumber);
@@ -331,6 +328,10 @@ public class FormGaji extends javax.swing.JInternalFrame {
             gajiDefaultTableModel.removeRow(gajiTable.getSelectedRow());
         }
     }//GEN-LAST:event_hapusMenuItemActionPerformed
+
+    private void gajiTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gajiTableMousePressed
+        klikKananTabel(evt);
+    }//GEN-LAST:event_gajiTableMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

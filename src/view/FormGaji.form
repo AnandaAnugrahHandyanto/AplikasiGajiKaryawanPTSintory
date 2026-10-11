@@ -237,11 +237,11 @@
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="5" rowCount="0">
-                    <Column editable="false" title="Kode" type="java.lang.Object"/>
+                    <Column editable="true" title="Kode" type="java.lang.Object"/>
                     <Column editable="false" title="Nama Pekerjaan" type="java.lang.Object"/>
-                    <Column editable="false" title="Gaji Bersih" type="java.lang.Object"/>
-                    <Column editable="false" title="Gaji Kotor" type="java.lang.Object"/>
-                    <Column editable="false" title="Tunjangan" type="java.lang.Object"/>
+                    <Column editable="true" title="Gaji Bersih" type="java.lang.Object"/>
+                    <Column editable="true" title="Gaji Kotor" type="java.lang.Object"/>
+                    <Column editable="true" title="Tunjangan" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -278,6 +278,7 @@
                 </Property>
               </Properties>
               <Events>
+                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="gajiTableMousePressed"/>
                 <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="gajiTableMouseReleased"/>
                 <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="gajiTablePropertyChange"/>
               </Events>

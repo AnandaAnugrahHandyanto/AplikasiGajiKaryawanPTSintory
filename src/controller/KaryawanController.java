@@ -55,6 +55,49 @@ public class KaryawanController {
         }
     }
     
+        public void cari(javax.swing.JTextField ktpTextField) {
+        if (!ktpTextField.getText().equals("")) {
+            if (karyawan.baca(ktpTextField.getText())) {
+                FormUtama.formKaryawan.setNama(karyawan.getNama());
+                FormUtama.formKaryawan.setRuang(karyawan.getRuang());
+                FormUtama.formKaryawan.setPassword(karyawan.getPassword());
+            } else {
+                FormUtama.formKaryawan.setNama("");
+                FormUtama.formKaryawan.setRuang(1);
+                FormUtama.formKaryawan.setPassword("");
+                javax.swing.JOptionPane.showMessageDialog(null, 
+                    karyawan.getPesan(), "Kesalahan", 
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, 
+                "KTP tidak boleh kosong", "Kesalahan", 
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void hapus(javax.swing.JTextField ktpTextField) {
+        String ktp = ktpTextField.getText().trim();
+        if (ktp.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Masukkan KTP yang ingin dihapus!");
+            return;
+        }
+
+        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(null, 
+            "Yakin hapus data dengan KTP " + ktp + "?", "Konfirmasi", 
+            javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
+            if (karyawan.hapus(ktp)) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Data berhasil dihapus!");
+                FormUtama.formKaryawan.setKtp("");
+                FormUtama.formKaryawan.setNama("");
+                FormUtama.formKaryawan.setPassword("");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(null, karyawan.getPesan());
+            }
+        }
+    }
     public void tampilkanFormLihatKaryawan() {
         formLihatKaryawan = new FormLihatKaryawan(null, true);
         if (karyawan.bacaData()) {

@@ -154,13 +154,12 @@ public class FormLihatKaryawan extends javax.swing.JDialog {
     }
     
     private void pilihButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pilihButtonActionPerformed
-            if (karyawanTable.getSelectedRowCount() > 0) {
+        if (karyawanTable.getSelectedRowCount() > 0) {
             ktpDipilih = karyawanTable.getValueAt(
                 karyawanTable.getSelectedRow(), 0).toString();
             dispose();
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "belum ada yang dipilih");
+            javax.swing.JOptionPane.showMessageDialog(this, "Belum ada yang dipilih");
         }
     }//GEN-LAST:event_pilihButtonActionPerformed
 

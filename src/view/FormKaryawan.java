@@ -9,6 +9,8 @@ package view;
  * @author anandaanugrah
  */
 public class FormKaryawan extends javax.swing.JInternalFrame {
+    
+    private final controller.KaryawanController karyawanController = new controller.KaryawanController();
 
     /**
      * Creates new form FormKaryawan
@@ -55,8 +57,20 @@ public class FormKaryawan extends javax.swing.JInternalFrame {
 
         jLabel4.setText("Password");
 
+        ktpTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                ktpTextFieldKeyPressed(evt);
+            }
+        });
+
         ruangComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         ruangComboBox.addItemListener(this::ruangComboBoxItemStateChanged);
+
+        passwordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordFieldKeyPressed(evt);
+            }
+        });
 
         lihatButton.setText("Lihat");
         lihatButton.addActionListener(this::lihatButtonActionPerformed);
@@ -205,12 +219,10 @@ public class FormKaryawan extends javax.swing.JInternalFrame {
     }
     
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
-        controller.KaryawanController karyawanController = new controller.KaryawanController();
         karyawanController.simpan(ktpTextField, namaTextField, ruangComboBox, passwordField);
     }//GEN-LAST:event_simpanButtonActionPerformed
 
     private void lihatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lihatButtonActionPerformed
-        controller.KaryawanController karyawanController = new controller.KaryawanController();
         karyawanController.tampilkanFormLihatKaryawan();
     }//GEN-LAST:event_lihatButtonActionPerformed
 
@@ -223,27 +235,18 @@ public class FormKaryawan extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tutupButtonActionPerformed
 
     private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
-        String kode = kodePekerjaanTextField.getText().trim();
-    if (kode.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Masukkan Kode Pekerjaan!");
-        return;
-    }
-    
-    int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, 
-        "Yakin hapus Kode " + kode + "?", "Konfirmasi", 
-        javax.swing.JOptionPane.YES_NO_OPTION);
-    
-    if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
-        model.Pekerjaan pekerjaan = new model.Pekerjaan();
-        if (pekerjaan.hapus(kode)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
-            kodePekerjaanTextField.setText("");
-            namaPekerjaanTextField.setText("");
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, pekerjaan.getPesan());
-        }
-    }
+        karyawanController.hapus(ktpTextField);
     }//GEN-LAST:event_hapusButtonActionPerformed
+
+    private void ktpTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ktpTextFieldKeyPressed
+            if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            karyawanController.cari(ktpTextField);
+        }
+    }//GEN-LAST:event_ktpTextFieldKeyPressed
+
+    private void passwordFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyPressed
+        karyawanController.setHashed(false);
+    }//GEN-LAST:event_passwordFieldKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton hapusButton;
